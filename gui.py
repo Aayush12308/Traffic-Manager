@@ -78,10 +78,10 @@ traffic_lights = []
 
 positions = [(250, 50), (250, 550), (50, 250), (450, 250)]
 video_paths = [
-    "C:\\Users\\ayush\\Downloads\\2103099-sd_640_360_30fps.mp4",
-    "C:\\Users\\ayush\\Downloads\\2109463-sd_640_360_30fps.mp4",
-    "C:\\Users\\ayush\\Downloads\\3727445-sd_426_240_30fps.mp4",
-    "C:\\Users\\ayush\\Downloads\\853908-sd_640_360_25fps.mp4"
+    "vids/vid1.mp4",
+    "vids/vid2.mp4",
+    "vids/vid3.mp4",
+    "vids/vid4.mp4"
 ]
 
 caps = [cv2.VideoCapture(path) for path in video_paths]
