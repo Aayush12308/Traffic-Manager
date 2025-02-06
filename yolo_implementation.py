@@ -5,7 +5,7 @@ import cvzone
 import cv2
 
 
-model = YOLO('../Yolo-Weights/yolov8n.pt')
+model = YOLO('Yolo-Weights/yolov8l.pt')
 
 class YOLOImplementation:
     def __init__(self):
@@ -34,7 +34,7 @@ class YOLOImplementation:
 
         frame_counter = 0
 
-        fps = cap.get(cv2.CAP_PROP_FPS)
+        fps = cap.get(cv2.CAP_PROP_FPS)   
         specific_time = int(fps * time)
 
         while True:
@@ -54,7 +54,7 @@ class YOLOImplementation:
                         cls = int(box.cls[0])
                         currentClass = self.classNames[cls]
                         # print(f'{currentClass}:{conf}')
-                        if currentClass in ['car', 'truck', 'bus', 'motorbike']:
+                        if currentClass in ['car', 'truck', 'bus', 'motorbike'] and conf > .5:
                             self.d[currentClass] += 1
                             cvzone.putTextRect(img, f"{currentClass}: {conf}", (x1, y1), thickness=0, scale=1)
                             currntArray = np.array([x1, y1, x2, y2, conf])
@@ -77,6 +77,6 @@ class YOLOImplementation:
 
 
 
-obj = YOLOImplementation()
-d = obj.execute('/Users/akashzamnani/Desktop/Python-Project/CarDetection/videos/23712-337108764_medium.mp4','new_vid_trial.png',5)
-print(d)
+# obj = YOLOImplementation()
+# d = obj.execute('/Users/akashzamnani/Desktop/Python-Project/CarDetection/videos/23712-337108764_medium.mp4','new_vid_trial.png',5)
+# print(d)
