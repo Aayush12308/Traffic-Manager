@@ -53,7 +53,7 @@ class YOLOImplementation:
                         conf = int(box.conf[0] * 100) / 100
                         cls = int(box.cls[0])
                         currentClass = self.classNames[cls]
-                        # print(f'{currentClass}:{conf}')
+                        print(f'{currentClass}:{conf}')
                         if currentClass in ['car', 'truck', 'bus', 'motorbike'] and conf > .5:
                             self.d[currentClass] += 1
                             cvzone.putTextRect(img, f"{currentClass}: {conf}", (x1, y1), thickness=0, scale=1)
@@ -61,19 +61,19 @@ class YOLOImplementation:
                             # cvzone.cornerRect(img, (x1, y1, w, h), l=7, rt=5)
                             cv2.rectangle(img, (x1, y1), (x2, y2), (0, 255, 0), 2)
                             dets = np.vstack((dets, currntArray))
-                cv2.imshow('Image', img)
+                # cv2.imshow('Image', img)
                 # print(signal_time)
 
-                cv2.waitKey(0)
+                # cv2.waitKey(0)
                 return self.d
                 # return self.d
 
 
             frame_counter += 1
 
-            cv2.imshow('Image', img)
+            # cv2.imshow('Image', img)
             # print(signal_time)
-            cv2.waitKey(1)
+            # cv2.waitKey(1)
 
 
 

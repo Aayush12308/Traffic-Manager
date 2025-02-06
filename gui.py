@@ -1,6 +1,9 @@
 import tkinter as tk
 from PIL import Image, ImageTk
 import cv2
+from yolo_implementation import  YOLOImplementation
+
+
 
 # Traffic Light Class
 class TrafficLight:
@@ -27,7 +30,7 @@ class TrafficLight:
 
 # Function to update video frames
 def update_video(video_frame, cap, traffic_light, idx):
-    global current_video_index
+    global current_video_index, yolo_executed
 
     ret, frame = cap.read()
 
@@ -41,6 +44,20 @@ def update_video(video_frame, cap, traffic_light, idx):
         video_frame.configure(image=imgtk)
 
         traffic_light.update_light("green")  # Green while playing
+
+        total_frames = int(cap.get(cv2.CAP_PROP_FRAME_COUNT))
+        fps = int(cap.get(cv2.CAP_PROP_FPS))
+        current_frame = int(cap.get(cv2.CAP_PROP_POS_FRAMES))
+
+        # Run YOLO 3 seconds before the video ends
+        if current_frame >= total_frames - (fps * 3) and not yolo_executed:
+            next_video_index = (idx + 1) % len(video_paths)  # Loop back if last video
+            print(f"Running YOLO on next video: {video_paths[next_video_index]}")
+
+            # Execute YOLO on next video
+            yolo = YOLOImplementation()
+            print(yolo.execute(video_paths[next_video_index], mask_paths[next_video_index], 0))
+            yolo_executed = True 
 
         root.after(30, update_video, video_frame, cap, traffic_light, idx)  # Continue playing
 
@@ -57,8 +74,9 @@ def update_video(video_frame, cap, traffic_light, idx):
 
 # Function to start a specific video
 def start_video(idx):
-    global current_video_index
+    global current_video_index,yolo_executed
     current_video_index = idx
+    yolo_executed = False 
 
     for i in range(len(caps)):
         if i == idx:
@@ -78,14 +96,22 @@ traffic_lights = []
 
 positions = [(250, 50), (250, 550), (50, 250), (450, 250)]
 video_paths = [
-    "/Users/akashzamnani/Desktop/Traffic-BE-proj/Traffic-Manager/vids/vid1.mp4",
-    "/Users/akashzamnani/Desktop/Traffic-BE-proj/Traffic-Manager/vids/vid2.mp4",
-    "/Users/akashzamnani/Desktop/Traffic-BE-proj/Traffic-Manager/vids/vid3.mp4",
-    "/Users/akashzamnani/Desktop/Traffic-BE-proj/Traffic-Manager/vids/vid4.mp4"
+    '/Users/akashzamnani/Desktop/Traffic-BE-proj/Traffic-Manager/vids/23712-337108764_medium.mp4',
+    "/Users/akashzamnani/Desktop/Traffic-BE-proj/Traffic-Manager/vids/cars.mp4",
+    '/Users/akashzamnani/Desktop/Traffic-BE-proj/Traffic-Manager/vids/23712-337108764_medium.mp4',
+    "/Users/akashzamnani/Desktop/Traffic-BE-proj/Traffic-Manager/vids/cars.mp4"
+]
+
+mask_paths = [
+    '/Users/akashzamnani/Desktop/Traffic-BE-proj/Traffic-Manager/masks/vid1.png',
+    '/Users/akashzamnani/Desktop/Traffic-BE-proj/Traffic-Manager/masks/vid2.png',
+    '/Users/akashzamnani/Desktop/Traffic-BE-proj/Traffic-Manager/masks/vid1.png',
+    '/Users/akashzamnani/Desktop/Traffic-BE-proj/Traffic-Manager/masks/vid2.png',
 ]
 
 caps = [cv2.VideoCapture(path) for path in video_paths]
 current_video_index = 0  # Track which video is currently playing
+yolo_executed = False
 
 for i, (x, y) in enumerate(positions):
     frame = tk.Frame(root, width=260, height=180)
