@@ -45,6 +45,8 @@ def update_video(video_frame, cap, traffic_light, idx):
 
         traffic_light.update_light("green")  # Green while playing
 
+
+        ##### yolo implementation code , add wherever you change
         total_frames = int(cap.get(cv2.CAP_PROP_FRAME_COUNT))
         fps = int(cap.get(cv2.CAP_PROP_FPS))
         current_frame = int(cap.get(cv2.CAP_PROP_POS_FRAMES))
@@ -58,6 +60,7 @@ def update_video(video_frame, cap, traffic_light, idx):
             yolo = YOLOImplementation()
             print(yolo.execute(video_paths[next_video_index], mask_paths[next_video_index], 0))
             yolo_executed = True 
+        ### yolo code ends
 
         root.after(30, update_video, video_frame, cap, traffic_light, idx)  # Continue playing
 
