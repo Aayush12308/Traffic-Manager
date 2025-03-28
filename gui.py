@@ -323,17 +323,17 @@ right_frame.bind("<Configure>", reposition_tl_frames)
 # Video & Mask Paths
 # ---------------------
 video_paths = [
-    "Traffic-Manager\\vids\\23712-337108764_medium.mp4",
-    "Traffic-Manager\\vids\\cars.mp4",
-    "Traffic-Manager\\vids\\23712-337108764_medium.mp4",
-    "Traffic-Manager\\vids\\cars.mp4"
+    "vids/23712-337108764_medium.mp4",
+    "vids/cars.mp4",
+    "vids/23712-337108764_medium.mp4",
+    "vids/cars.mp4"
 ]
 
 mask_paths = [
-    "Traffic-Manager\\masks\\vid1.png",
-    "Traffic-Manager\\masks\\vid2.png",
-    "Traffic-Manager\\masks\\vid1.png",
-    "Traffic-Manager\\masks\\vid2.png"
+    "masks/vid1.png",
+    "masks/vid2.png",
+    "masks/vid1.png",
+    "masks/vid2.png"
 ]
 
 # Create VideoCapture objects for each video.

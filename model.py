@@ -4,6 +4,7 @@ import pandas as pd
 from sklearn.preprocessing import QuantileTransformer
 
 
+
 def normalisedf(df):
     scaler = QuantileTransformer(output_distribution='normal')
     df[['CarCount', 'BikeCount', 'BusCount', 'TruckCount']] = scaler.fit_transform(df[['CarCount', 'BikeCount', 'BusCount', 'TruckCount']])
@@ -13,7 +14,7 @@ def normalisedf(df):
 
 
 def load_model():
-    pipeline = joblib.load("/Users/akashzamnani/Desktop/Traffic-BE-proj/Traffic-Manager/model/traffic_pipeline.pkl")
+    pipeline = joblib.load("/Users/akashzamnani/Desktop/Traffic-BE-proj/Traffic-Manager/model/traffic_pipeline1.pkl",)
     return pipeline
 
 def run_model(df):
@@ -28,10 +29,10 @@ X_manual = pd.DataFrame([{
     "Date": 17,
     "Day of the week": "Thursday",
     "CarCount": 15,
-    "BikeCount":9,
-    "BusCount": 1,
-    "TruckCount": 0,
-    "Total": 27,
+    "BikeCount":100,
+    "BusCount": 20,
+    "TruckCount": 4,
+    "Total": 139,
     "Weekend": False,
     "Hour": 12,
 }])
