@@ -2,6 +2,7 @@ import tkinter as tk
 from PIL import Image, ImageTk, ImageOps, ImageFilter
 import cv2
 from yolo_implementation import YOLOImplementation
+from model import run_model
 
 # ---------------------
 # Traffic Light Class
@@ -107,8 +108,12 @@ def update_video():
             print(f"Running YOLO on next video: {video_paths[next_video_index]}")
             try:
                 yolo = YOLOImplementation()
-                print(yolo.execute(video_paths[next_video_index], mask_paths[next_video_index], 0))
+                dict = yolo.execute(video_paths[next_video_index], mask_paths[next_video_index], 0)
+                print(dict)
                 yolo_executed = True
+                prediction = run_model(dict)
+                print(prediction)
+
             except Exception as e:
                 print(f"YOLO execution error: {e}")
 
