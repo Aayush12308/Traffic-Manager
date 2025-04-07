@@ -109,7 +109,6 @@ def update_video():
             try:
                 yolo = YOLOImplementation()
                 dict = yolo.execute(video_paths[next_video_index], mask_paths[next_video_index], 0)
-                print(dict)
                 yolo_executed = True
                 prediction = run_model(dict)
                 print(prediction)

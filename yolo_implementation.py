@@ -54,7 +54,7 @@ class YOLOImplementation:
                         cls = int(box.cls[0])
                         currentClass = self.classNames[cls]
                         print(f'{currentClass}:{conf}')
-                        if currentClass in ['car', 'truck', 'bus', 'motorbike'] and conf > .5:
+                        if currentClass in ['car', 'truck', 'bus', 'motorbike'] and conf > .3:
                             self.d[currentClass] += 1
                             cvzone.putTextRect(img, f"{currentClass}: {conf}", (x1, y1), thickness=0, scale=1)
                             currntArray = np.array([x1, y1, x2, y2, conf])
