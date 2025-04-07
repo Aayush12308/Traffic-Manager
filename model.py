@@ -52,6 +52,7 @@ def run_model(dict):
 #     "Hour": 12,
 #     "AM/PM":'PM'
 # }])
+####
     model = load_model()
     print(df)
     df = normalisedf(df)
