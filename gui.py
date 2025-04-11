@@ -116,7 +116,7 @@ def update_video():
             except Exception as e:
                 print(f"YOLO execution error: {e}")
 
-        video_label.after(30, update_video)
+        video_label.after(2, update_video)
     else:
         # When the video ends: reset its position and switch to the next video.
         cap.set(cv2.CAP_PROP_POS_FRAMES, 0)
@@ -327,17 +327,17 @@ right_frame.bind("<Configure>", reposition_tl_frames)
 # Video & Mask Paths
 # ---------------------
 video_paths = [
-    "vids/23712-337108764_medium.mp4",
-    "vids/cars.mp4",
-    "vids/23712-337108764_medium.mp4",
-    "vids/cars.mp4"
+    "/Users/govindrajdapkekar/Downloads/Traffic-Manager-main/vids/23712-337108764_medium.mp4",
+    "/Users/govindrajdapkekar/Downloads/Traffic-Manager-main/vids/cars.mp4",
+    "/Users/govindrajdapkekar/Downloads/Traffic-Manager-main/vids/23712-337108764_medium.mp4",
+    "/Users/govindrajdapkekar/Downloads/Traffic-Manager-main/vids/cars.mp4"
 ]
 
 mask_paths = [
-    "masks/vid1.png",
-    "masks/vid2.png",
-    "masks/vid1.png",
-    "masks/vid2.png"
+    "/Users/govindrajdapkekar/Downloads/Traffic-Manager-main/masks/vid1.png",
+    "/Users/govindrajdapkekar/Downloads/Traffic-Manager-main/masks/vid2.png",
+    "/Users/govindrajdapkekar/Downloads/Traffic-Manager-main/masks/vid1.png",
+    "/Users/govindrajdapkekar/Downloads/Traffic-Manager-main/masks/vid2.png"
 ]
 
 # Create VideoCapture objects for each video.
@@ -357,3 +357,4 @@ def on_closing():
 
 root.protocol("WM_DELETE_WINDOW", on_closing)
 root.mainloop()
+
