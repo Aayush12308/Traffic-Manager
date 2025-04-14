@@ -5,72 +5,59 @@
 }
 
 body {
-    font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+    font-family: 'Segoe UI', Arial, sans-serif;
     height: 100vh;
     overflow: hidden;
-    background-color: #0a0a0a;
+    background: #121212;
 }
 
 .container {
     display: flex;
     height: 100vh;
-    gap: 2rem;
-    padding: 2rem;
-    background-color: #121212;
+    padding: 20px;
+    gap: 20px;
+    background: linear-gradient(135deg, #1a1a1a 0%, #0a0a0a 100%);
 }
 
 /* Video container styles */
 .video-container {
     flex: 1;
-    background-color: #000000;
+    background-color: #000;
     position: relative;
     overflow: hidden;
-    border-radius: 1.5rem;
-    box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
-    backdrop-filter: blur(10px);
-    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 15px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+    border: 1px solid rgba(255, 255, 255, 0.05);
 }
 
-#video-display {
+#videoPlayer {
     width: 100%;
     height: 100%;
     object-fit: cover;
-    border-radius: 1.5rem;
 }
 
 /* Intersection container styles */
 .intersection-container {
     flex: 1;
-    background-color: #1a1a1a;
+    background: #1c1c1c;
     position: relative;
     overflow: hidden;
-    border-radius: 1.5rem;
-    box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
-    backdrop-filter: blur(10px);
-    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 15px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+    border: 1px solid rgba(255, 255, 255, 0.05);
 }
 
 .road-intersection {
     position: relative;
     width: 100%;
     height: 100%;
-    background-color: #121212;
 }
 
 /* Road styles */
 .road {
     position: absolute;
-    background-color: #1e1e1e;
+    background-color: #333;
     box-shadow: 0 0 20px rgba(0, 0, 0, 0.3);
-    z-index: 1;
-    /* Add asphalt texture */
-    background-image: 
-        linear-gradient(45deg, #1a1a1a 25%, transparent 25%),
-        linear-gradient(-45deg, #1a1a1a 25%, transparent 25%),
-        linear-gradient(45deg, transparent 75%, #1a1a1a 75%),
-        linear-gradient(-45deg, transparent 75%, #1a1a1a 75%);
-    background-size: 4px 4px;
-    background-position: 0 0, 0 2px, 2px -2px, -2px 0px;
 }
 
 .road.horizontal {
@@ -78,9 +65,10 @@ body {
     height: 100px;
     top: 50%;
     transform: translateY(-50%);
-    /* Add road edges */
-    border-top: 2px solid rgba(255, 255, 255, 0.1);
-    border-bottom: 2px solid rgba(255, 255, 255, 0.1);
+    background: #333;
+    /* Add white edge lines */
+    border-top: 4px solid rgba(255, 255, 255, 0.9);
+    border-bottom: 4px solid rgba(255, 255, 255, 0.9);
 }
 
 .road.vertical {
@@ -88,16 +76,17 @@ body {
     height: 100%;
     left: 50%;
     transform: translateX(-50%);
-    /* Add road edges */
-    border-left: 2px solid rgba(255, 255, 255, 0.1);
-    border-right: 2px solid rgba(255, 255, 255, 0.1);
+    background: #333;
+    /* Add white edge lines */
+    border-left: 4px solid rgba(255, 255, 255, 0.9);
+    border-right: 4px solid rgba(255, 255, 255, 0.9);
 }
 
 /* Center line styles */
 .center-line {
     position: absolute;
-    background-color: rgba(255, 255, 255, 0.9);
-    box-shadow: 0 0 5px rgba(255, 255, 255, 0.3);
+    background-color: #f1c40f;
+    opacity: 0.9;
 }
 
 .center-line.horizontal {
@@ -105,8 +94,17 @@ body {
     height: 4px;
     top: 50%;
     transform: translateY(-50%);
-    background-image: linear-gradient(to right, rgba(255, 255, 255, 0.9) 50%, transparent 50%);
-    background-size: 20px 4px;
+    /* Double yellow line effect */
+    background-image: 
+        linear-gradient(to right,
+            #f1c40f 0%,
+            #f1c40f 45%,
+            transparent 45%,
+            transparent 55%,
+            #f1c40f 55%,
+            #f1c40f 100%
+        );
+    box-shadow: 0 0 10px rgba(241, 196, 15, 0.3);
 }
 
 .center-line.vertical {
@@ -114,8 +112,49 @@ body {
     height: 100%;
     left: 50%;
     transform: translateX(-50%);
-    background-image: linear-gradient(to bottom, rgba(255, 255, 255, 0.9) 50%, transparent 50%);
-    background-size: 4px 20px;
+    /* Double yellow line effect */
+    background-image: 
+        linear-gradient(to bottom,
+            #f1c40f 0%,
+            #f1c40f 45%,
+            transparent 45%,
+            transparent 55%,
+            #f1c40f 55%,
+            #f1c40f 100%
+        );
+    box-shadow: 0 0 10px rgba(241, 196, 15, 0.3);
+}
+
+/* Add road texture */
+.road::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background-image: 
+        repeating-linear-gradient(
+            90deg,
+            transparent,
+            transparent 50px,
+            rgba(0, 0, 0, 0.1) 50px,
+            rgba(0, 0, 0, 0.1) 51px
+        );
+    pointer-events: none;
+}
+
+/* Add asphalt texture */
+.road::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background-image: 
+        radial-gradient(
+            circle at 50% 50%,
+            rgba(0, 0, 0, 0.2) 0%,
+            transparent 1%
+        );
+    background-size: 8px 8px;
+    opacity: 0.3;
+    pointer-events: none;
 }
 
 /* Crosswalk styles */
@@ -232,73 +271,91 @@ body {
 /* Traffic light styles */
 .traffic-light {
     position: absolute;
-    width: 80px;
-    height: 220px;
-    background-color: #1a1a1a;
-    border-radius: 1rem;
+    width: 70px;
+    height: 200px;
+    background: linear-gradient(145deg, #0a0a0a, #1a1a1a);
+    border-radius: 15px;
     display: flex;
     flex-direction: column;
     justify-content: space-around;
-    align-items: center;
-    padding: 1.5rem;
-    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
-    border: 1px solid rgba(255, 255, 255, 0.1);
-    backdrop-filter: blur(5px);
-    z-index: 20;
+    padding: 15px;
+    box-shadow: 
+        0 10px 20px rgba(0, 0, 0, 0.5),
+        inset 0 0 15px rgba(0, 0, 0, 0.7);
+    border: 1px solid rgba(255, 255, 255, 0.05);
 }
 
 .traffic-light.top {
-    top: 2rem;
+    top: 5%;
     left: 50%;
     transform: translateX(-50%);
 }
 
 .traffic-light.bottom {
-    bottom: 2rem;
+    bottom: 5%;
     left: 50%;
     transform: translateX(-50%);
 }
 
 .traffic-light.left {
-    left: 2rem;
+    left: 5%;
     top: 50%;
     transform: translateY(-50%);
 }
 
 .traffic-light.right {
-    right: 2rem;
+    right: 5%;
     top: 50%;
     transform: translateY(-50%);
 }
 
 .light {
-    width: 60px;
-    height: 60px;
+    width: 40px;
+    height: 40px;
     border-radius: 50%;
-    background-color: #2a2a2a;
-    border: 2px solid rgba(255, 255, 255, 0.1);
-    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    background-color: #222;
+    position: relative;
+    transition: all 0.3s ease;
+    box-shadow: 
+        inset 0 0 10px rgba(0, 0, 0, 0.7),
+        0 0 5px rgba(0, 0, 0, 0.5);
+}
+
+.light::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    border-radius: 50%;
     box-shadow: inset 0 0 15px rgba(0, 0, 0, 0.5);
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    margin: 0.5rem 0;
 }
 
 .light.red.active {
-    background-color: #ff4444;
-    box-shadow: 0 0 30px rgba(255, 68, 68, 0.5);
-    border-color: rgba(255, 68, 68, 0.3);
+    background-color: #ff3b30;
+    box-shadow: 
+        0 0 30px rgba(255, 59, 48, 0.6),
+        inset 0 0 15px rgba(255, 255, 255, 0.3);
 }
 
 .light.yellow.active {
-    background-color: #ffbb33;
-    box-shadow: 0 0 30px rgba(255, 187, 51, 0.5);
-    border-color: rgba(255, 187, 51, 0.3);
+    background-color: #ffcc00;
+    box-shadow: 
+        0 0 30px rgba(255, 204, 0, 0.6),
+        inset 0 0 15px rgba(255, 255, 255, 0.3);
 }
 
 .light.green.active {
-    background-color: #00C851;
-    box-shadow: 0 0 30px rgba(0, 200, 81, 0.5);
-    border-color: rgba(0, 200, 81, 0.3);
+    background-color: #34c759;
+    box-shadow: 
+        0 0 30px rgba(52, 199, 89, 0.6),
+        inset 0 0 15px rgba(255, 255, 255, 0.3);
+}
+
+/* Remove all roundabout related styles */
+.road-intersection::before,
+.road-intersection::after,
+.roundabout-arrow {
+    display: none;
 } 
