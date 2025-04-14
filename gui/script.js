@@ -16,16 +16,15 @@ const maskPaths = [
 
 let currentVideoIndex = 0;
 let yoloExecuted = false;
-const videoElement = document.getElementById('video-display');
+const videoPlayer = document.getElementById('videoPlayer');
 const trafficLights = document.querySelectorAll('.traffic-light');
 
 // Function to update traffic lights
 function updateTrafficLights(activeIndex) {
-    console.log(`Updating traffic lights. Active index: ${activeIndex}`);
     trafficLights.forEach((light, index) => {
-        const redLight = light.querySelector('.red');
-        const yellowLight = light.querySelector('.yellow');
-        const greenLight = light.querySelector('.green');
+        const redLight = light.querySelector('.light.red');
+        const yellowLight = light.querySelector('.light.yellow');
+        const greenLight = light.querySelector('.light.green');
 
         // Reset all lights
         redLight.classList.remove('active');
@@ -35,43 +34,46 @@ function updateTrafficLights(activeIndex) {
         // Set active light
         if (index === activeIndex) {
             greenLight.classList.add('active');
-            console.log(`Setting green light for index ${index}`);
         } else {
             redLight.classList.add('active');
-            console.log(`Setting red light for index ${index}`);
         }
     });
 }
 
-// Function to handle video end
-function handleVideoEnd() {
-    console.log('Video ended');
-    // Reset YOLO execution flag
-    yoloExecuted = false;
-    
-    // Update traffic lights - turn current light to red
-    updateTrafficLights(currentVideoIndex);
-    
-    // Switch to next video
-    currentVideoIndex = (currentVideoIndex + 1) % videoPaths.length;
-    console.log(`Switching to video ${currentVideoIndex}: ${videoPaths[currentVideoIndex]}`);
-    
-    // Set up the next video
-    videoElement.src = videoPaths[currentVideoIndex];
-    videoElement.load(); // Ensure the video is loaded
-    videoElement.play().catch(error => {
-        console.error('Error playing video:', error);
+// Function to handle video playback
+function playNextVideo() {
+    // Turn all signals red before switching
+    trafficLights.forEach(light => {
+        light.querySelector('.light.green').classList.remove('active');
+        light.querySelector('.light.red').classList.add('active');
     });
     
-    // Update traffic lights for new video
-    updateTrafficLights(currentVideoIndex);
+    // Update to next video
+    currentVideoIndex = (currentVideoIndex + 1) % videoPaths.length;
+    videoPlayer.src = videoPaths[currentVideoIndex];
+    
+    // Wait for video to load
+    videoPlayer.onloadeddata = () => {
+        videoPlayer.play().then(() => {
+            // Update traffic lights after video starts playing
+            updateTrafficLights(currentVideoIndex);
+        }).catch(error => {
+            console.error('Error playing video:', error);
+            // Try next video if current one fails
+            setTimeout(playNextVideo, 1000);
+        });
+    };
+    
+    yoloExecuted = false;
 }
 
-// Function to run YOLO (placeholder for actual implementation)
+// Function to run YOLO (placeholder for actual YOLO implementation)
 async function runYOLO() {
     if (!yoloExecuted) {
         try {
-            console.log(`Running YOLO on next video: ${videoPaths[(currentVideoIndex + 1) % videoPaths.length]}`);
+            // Here you would implement the actual YOLO integration
+            console.log(`Running YOLO on video: ${videoPaths[currentVideoIndex]}`);
+            console.log(`Using mask: ${maskPaths[currentVideoIndex]}`);
             yoloExecuted = true;
         } catch (error) {
             console.error('YOLO execution error:', error);
@@ -79,38 +81,45 @@ async function runYOLO() {
     }
 }
 
-// Initialize the application
-function init() {
-    console.log('Initializing application');
+// Event listeners
+videoPlayer.addEventListener('timeupdate', () => {
+    const duration = videoPlayer.duration;
+    const currentTime = videoPlayer.currentTime;
     
-    // Set up video element
-    videoElement.src = videoPaths[0];
-    videoElement.addEventListener('ended', handleVideoEnd);
-    videoElement.addEventListener('error', (e) => {
-        console.error('Video error:', e);
-    });
-    
-    // Set up YOLO execution timer
-    videoElement.addEventListener('timeupdate', () => {
-        const duration = videoElement.duration;
-        const currentTime = videoElement.currentTime;
-        
-        if (duration && currentTime) {
-            // Run YOLO 3 seconds before the video ends
-            if (duration - currentTime <= 3 && !yoloExecuted) {
-                runYOLO();
-            }
-        }
-    });
-    
-    // Start with first video
-    videoElement.play().then(() => {
-        console.log('First video started playing');
-        updateTrafficLights(0);
-    }).catch(error => {
-        console.error('Error playing first video:', error);
-    });
+    // Run YOLO 3 seconds before the video ends
+    if (duration - currentTime <= 3 && !yoloExecuted) {
+        runYOLO();
+    }
+});
+
+videoPlayer.addEventListener('ended', () => {
+    console.log('Video ended, switching to next video');
+    playNextVideo();
+});
+
+videoPlayer.addEventListener('error', (e) => {
+    console.error('Video error:', e);
+    playNextVideo();
+});
+
+// Initialize the first video
+function initializeVideo() {
+    videoPlayer.src = videoPaths[0];
+    videoPlayer.onloadeddata = () => {
+        videoPlayer.play().then(() => {
+            updateTrafficLights(0);
+        }).catch(error => {
+            console.error('Error playing initial video:', error);
+            setTimeout(playNextVideo, 1000);
+        });
+    };
 }
 
 // Start the application
-init(); 
+initializeVideo();
+
+// Handle window closing
+window.addEventListener('beforeunload', () => {
+    videoPlayer.pause();
+    videoPlayer.src = '';
+}); 
